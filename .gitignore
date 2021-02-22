@@ -21,3 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+project2_env/
+*.env
+
+src/__pycache__/
+*.pyc
