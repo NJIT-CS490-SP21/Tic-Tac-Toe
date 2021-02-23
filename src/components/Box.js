@@ -8,7 +8,7 @@ export default function Box(prop) {
             className={`box`} 
             onClick={() => {
                 prop.updateBoard(prop.id, prop.isChecked);
-                prop.updateCheck();
+                //prop.updateCheck();
             }}
         > 
         <p>{prop.value}</p>
