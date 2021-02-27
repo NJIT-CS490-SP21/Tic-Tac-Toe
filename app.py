@@ -2,8 +2,20 @@ import os
 from flask import Flask, send_from_directory, json, session
 from flask_socketio import SocketIO
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, static_folder='./build/static')
+
+# Point SQLAlchemy to your Heroku database
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# Gets rid of a warning
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
+
+# IMPORTANT: This must be AFTER creating db variable to prevent
+# circular import issues
+#from models import Person
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
