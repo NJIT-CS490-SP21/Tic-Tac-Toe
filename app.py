@@ -33,13 +33,20 @@ def index(filename):
 
 # When a client connects from this Socket connection, this function is run
 @socketio.on('connect')
-def on_connect():
-    print('User connected!')
-
+def on_connect(sid):
+    print("User connected!"+str(sid))
 # When a client disconnects from this Socket connection, this function is run
 @socketio.on('disconnect')
 def on_disconnect():
     print('User disconnected!')
+    
+user_list = {}
+@socketio.on('login')
+def on_login(data):
+    print(str(data))
+    #print('User ' + data + ' entered')
+    socketio.emit('login',  data, broadcast=True, include_self=False)
+    
 
 # When a client emits the event 'chat' to the server, this function is run
 # 'chat' is a custom event name that we just decided
@@ -56,7 +63,8 @@ def on_update(data): # data is whatever arg you pass in your emit call on client
     # This emits the 'chat' event from the server to all clients except for
     # the client that emmitted the event that triggered this function
     socketio.emit('update',  data, broadcast=True, include_self=False)
-    
+
+
 # Note that we don't call app.run anymore. We call socketio.run with app arg
 socketio.run(
     app,

@@ -5,7 +5,7 @@ import io from 'socket.io-client';
 
 const socket = io(); 
 
-export default function Board() {
+export default function Board(prop) {
     const [board, setBoard] = useState([``,``,``,``,``,``,``,``,``]);
     const [check, setCheck] = useState(true);
     
@@ -57,6 +57,7 @@ export default function Board() {
         const check = data.check;
         const updatedBoard = data.board;    
         setCheck(!check);
+        
         const newBoard = updatedBoard.map((box,boxId) => {
             if (boxId === id) {
                 let newBox = `X`;
@@ -67,11 +68,9 @@ export default function Board() {
             }
             return box;
         });
-    
+        
         setBoard(newBoard);
     
-        console.log(newBoard);    
-        //setBoard(prevBoard => [...prevBoard, prevBoard[id] = value]);
     });
   }, []);
   
