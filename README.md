@@ -27,5 +27,18 @@
 <Placeholder>
 
 ## Technical Issues
- <Placeholder>
+- I had difficulty with updating my data throughout different browsers, specifically the board and user list. Both of them were updated in the triggered browser but not the rest. I fixed it by placing the setState(State) in every event received on the client side </br>
+How I solved it: 
+
+    # Example
+    socket.on('update', (data) => {
+        /.../
+        const updatedBoard = data.board;    
+        setBoard(updatedBoard);   
+    });
+    
+- I was not able to disallow specific users from playing if it is not their turn. However, I figured that in order to to that, the implementation has to be done by the backend to keep track of the turns. I set up an event in the server side to validate each time the user asks if they can make a move. </br>
+The flow is: onClick handler => client: emit the validate event => server: validate the turn and emit a boolean in the validate event => client: receive the validate event and tell the user whether to move
+
+
 
