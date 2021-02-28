@@ -31,7 +31,7 @@
 How I solved it: 
 
     # Example
-    socket.on('update', (data) => {
+    # socket.on('update', (data) => {
         /.../
         const updatedBoard = data.board;    
         setBoard(updatedBoard);   
