@@ -24,7 +24,8 @@
 <Placeholder>
 
 ## Future Features
-<Placeholder>
+- Implement bootstrap into the frontend in order to save time on feature enhancements in CSS. I currently have the CDN set up in the render header in App.js but it not working. 
+- 
 
 ## Technical Issues
 - I had difficulty with updating my data throughout different browsers, specifically the board and user list. Both of them were updated in the triggered browser but not the rest. I fixed it by placing the setState(State) in every event received on the client side </br>
