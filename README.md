@@ -30,8 +30,8 @@
 - I had difficulty with updating my data throughout different browsers, specifically the board and user list. Both of them were updated in the triggered browser but not the rest. I fixed it by placing the setState(State) in every event received on the client side </br>
 How I solved it: 
 
-    # Example
-    # socket.on('update', (data) => {
+    Example
+    socket.on('update', (data) => {
         /.../
         const updatedBoard = data.board;    
         setBoard(updatedBoard);   
