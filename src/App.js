@@ -6,7 +6,7 @@ import { useState, useRef } from 'react';
 import { useEffect } from 'react';
 import io from 'socket.io-client';
 
-const socket = io.on_connect("test"); 
+const socket = io(); 
 
 function App() {
   const inputRef = useRef(null);
@@ -35,6 +35,7 @@ function App() {
       socket.emit('login', {'userList': listCopy, 'newUser': userText});
       return listCopy;
     });
+    setCurrUser(userText);
     setLogIn(true);
   }
 
@@ -54,10 +55,9 @@ function App() {
       <h1>Tic Tac Toe</h1>
       {isLoggedIn === true ? (
       <div>
-      {console.log(userList)};
-        <Board />
+      
+        <Board currUser={currUser} value={userList[currUser]}/>
         </div>
-        
       ) : (
         <div>
           <input ref={inputRef} type="text" placeholder="Enter your username"/>

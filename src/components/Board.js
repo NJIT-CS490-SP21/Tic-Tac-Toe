@@ -8,25 +8,25 @@ const socket = io();
 export default function Board(prop) {
     const [board, setBoard] = useState([``,``,``,``,``,``,``,``,``]);
     const [check, setCheck] = useState(true);
+    const [isTurn, setTurn] = useState(false);
     
     function updateCheck(){
         setCheck(!check);
     }
-    function _helper(id, check){
+    function _helper(id, value){
         const newBoard = board.map((box,boxId) => {
         if (boxId === id) {
-            let newBox = `X`;
-            if (!check){
-                newBox = `O`;
-            }
-        return newBox;
-      }
-      return box;
-    });
-    return newBoard;
+            return value;
+        }
+        return box;
+        });
+        return newBoard;
     }
- 
+    
     function updateBoard(id, check){
+        socket.emit('validate', {'value':prop.value, 'id': id, "board":board});
+        
+        /*
         const newBoard = board.map((box,boxId) => {
             if (boxId === id) {
                 let newBox = `X`;
@@ -41,11 +41,37 @@ export default function Board(prop) {
 
         socket.emit('update', { "id": id, "check": check, "board":newBoard });
         setCheck(!check);
+        */
+        
     }
-  
+    
   useEffect(() => {
-    // Listening for a chat event emitted by the server. If received, we
-    // run the code in the function that is passed in as the second arg
+    socket.on('validate', (data) => {
+        console.log(data);
+        const isTurn = data.isTurn;
+        const id = data.id;
+        const value = data.value;
+        const updatedBoard = data.board;
+        
+        if (isTurn){
+            const newBoard = updatedBoard.map((box,boxId) => {
+            if (boxId === id) {
+                return value;
+            }
+            return box;
+            });
+            
+            console.log("test board");
+            console.log(newBoard);
+            setBoard(newBoard);
+            
+            socket.emit('go', value);
+            socket.emit('update', { "id": id, "value": value, "board":newBoard });
+            setCheck(!check);
+        }
+        
+    });
+    
     socket.on('update', (data) => {
         console.log('Chat event received!');
         console.log(board);
@@ -54,21 +80,17 @@ export default function Board(prop) {
         // If the server sends a message (on behalf of another client), then we
         // add it to the list of messages to render it on the UI.
         const id = data.id;
-        const check = data.check;
+        const value = data.value;
         const updatedBoard = data.board;    
         setCheck(!check);
         
         const newBoard = updatedBoard.map((box,boxId) => {
             if (boxId === id) {
-                let newBox = `X`;
-                if (!check){
-                    newBox = `O`;
-                }
-                return newBox;
+                return value;
             }
             return box;
         });
-        
+        socket.emit('go', value);
         setBoard(newBoard);
     
     });
@@ -84,7 +106,6 @@ export default function Board(prop) {
                             id={id} 
                             value={box} 
                             isChecked={check} 
-                            updateCheck={updateCheck}
                         />
             })}
         </div>
