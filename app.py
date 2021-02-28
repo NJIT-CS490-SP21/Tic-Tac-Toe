@@ -56,7 +56,6 @@ def get_user_by_value(value):
     position = val_list.index(value)
     return key_list[position]
  
-
 @socketio.on('login')
 def on_login(data):
     global player
@@ -64,9 +63,11 @@ def on_login(data):
     player = "X"
     user_list = data['userList']
     socketio.emit('login',  data, broadcast=True, include_self=False)
-  
-# When a client emits the event 'chat' to the server, this function is run
-# 'chat' is a custom event name that we just decided
+
+@socketio.on('start')
+def on_start(): 
+    socketio.emit('start', broadcast=True)
+    
 @socketio.on('validate')
 def on_validate(data): 
     value = data['value']
@@ -99,6 +100,10 @@ def on_win(value):
     print(user_list)
     data['user'] = get_user_by_value(value)
     socketio.emit('win', data);    
+
+@socketio.on('full')
+def on_full(): 
+    socketio.emit('full', broadcast=True, include_self=False)
 
 @socketio.on('reset')
 def on_reset(): 

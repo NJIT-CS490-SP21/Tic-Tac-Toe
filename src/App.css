@@ -64,5 +64,9 @@ body {
 }
 
 .text-big {
-  font-size: 20px;
+  font-size: 25px;
+}
+
+li {
+  font-size: 18px;
 }

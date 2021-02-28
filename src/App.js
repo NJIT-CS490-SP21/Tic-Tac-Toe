@@ -20,6 +20,8 @@ function App() {
   const [foundWinner, setFoundWinner] = useState(false);
   const [winner, setWinner] = useState('');
   const [winnerVal, setWinnerVal] = useState('');
+  const [isBoardFull, setBoardFull] = useState(false);
+  const [start, setStart] = useState(false);
   
   function logInButton(){
     const userText = inputRef.current.value;
@@ -44,9 +46,11 @@ function App() {
     setCurrUser(userText);
     setLogIn(true);
   }
-  
+
   function onClickReset(){
     socket.emit("reset");
+    setFoundWinner(false);
+    setBoardFull(false);
   }
   
   useEffect(() => {
@@ -56,6 +60,7 @@ function App() {
         const updatedList = data.userList;
         setUserList(updatedList);
         setUserCount((prevCount) => prevCount+1);
+        socket.emit("start");
     });
     
     socket.on('win', (data) => {
@@ -66,6 +71,15 @@ function App() {
       setWinnerVal(value);
       
       setFoundWinner(true);
+    });
+    
+    socket.on('full', (data) => {
+      setBoardFull(true);
+    });
+    
+    socket.on('reset', (data) => {
+      setFoundWinner(false);
+      setBoardFull(false);
     });
     
   }, []);
@@ -88,10 +102,17 @@ function App() {
               </div>
               <Board currUser={currUser} value={userList[currUser]}/>
               <div className='item border'>
-              {foundWinner === true ? (
+              {foundWinner === true  ? (
               <div>
-                <div class="alert alert-success" role="alert">
+                <div class="text-big" role="alert">
                     FOUND WINNER: {winner} - {winnerVal}
+                </div>
+                <button onClick={onClickReset}>Click here to reset game!</button>
+              </div>
+              ) : isBoardFull === true ? (
+                <div>
+                <div class="text-big" role="alert">
+                    BOARD FULL!
                 </div>
                 <button onClick={onClickReset}>Click here to reset game!</button>
               </div>
