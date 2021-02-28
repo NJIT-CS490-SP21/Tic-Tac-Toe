@@ -83,11 +83,11 @@ function App() {
           <h1>Tic Tac Toe</h1>
           {isLoggedIn === true ? (
             <div class='container'>
-              <div className='item'>
+              <div className='item border'>
                 <PlayerList userList={userList}/>
               </div>
               <Board currUser={currUser} value={userList[currUser]}/>
-              <div className='item'>
+              <div className='item border'>
               {foundWinner === true ? (
               <div>
                 <div class="alert alert-success" role="alert">
@@ -97,7 +97,9 @@ function App() {
               </div>
               ) : (
                 <ul>
-                <li>if you are X, you are first</li>
+                <p className="text-bold text-big">Your role is {userList[currUser]}</p>
+                <li>Game only starts when there are at least 2 users</li>
+                <li>If you are X, you are first</li>
                 <li>You can only play if it's your turn</li>
                 <li>If you're a Spectator, you cant make a move</li>
                 </ul>

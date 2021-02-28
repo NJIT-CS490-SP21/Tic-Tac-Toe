@@ -64,7 +64,7 @@ def on_login(data):
     player = "X"
     user_list = data['userList']
     socketio.emit('login',  data, broadcast=True, include_self=False)
-    
+  
 # When a client emits the event 'chat' to the server, this function is run
 # 'chat' is a custom event name that we just decided
 @socketio.on('validate')
@@ -74,8 +74,9 @@ def on_validate(data):
     board = data['board']
     
     global player
+    global user_list
     
-    if value != player or value == "Spectator":
+    if len(user_list) < 2 or value != player or value == "Spectator":
         data['isTurn'] = False
         socketio.emit('validate', data, broadcast=True, include_self=True)
     else:

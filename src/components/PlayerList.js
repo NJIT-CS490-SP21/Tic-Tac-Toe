@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-
+import '../css/PlayerList.css'
 export default function PlayerList(prop) {
     
     return (
         <div className={`list`}> 
-        <h2>List of users</h2>
+        <p className="text-big text-bold">List of users</p>
         <ol>
             {console.log(prop.userList)}
             {

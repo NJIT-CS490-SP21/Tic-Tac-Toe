@@ -48,4 +48,21 @@
 .item {
     flex-grow: 1;
     margin: 10px;
+    align-items: center;
+}
+
+.border {
+    border: 1px dotted; 
+}
+
+body {
+  font-family: 'Courier New', monospace;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-big {
+  font-size: 20px;
 }

@@ -74,7 +74,6 @@ export default function Board(prop) {
                 } 
                 socket.emit('go', value);
                 socket.emit('update', { "id": id, "value": value, "board":newBoard });
-                
             }
             
         }
