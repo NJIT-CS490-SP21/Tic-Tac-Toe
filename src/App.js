@@ -44,7 +44,11 @@ function App() {
     setCurrUser(userText);
     setLogIn(true);
   }
-
+  
+  function onClickReset(){
+    socket.emit("reset");
+  }
+  
   useEffect(() => {
     socket.on('login', (data) => {
         console.log('login event received!');
@@ -85,9 +89,12 @@ function App() {
               <Board currUser={currUser} value={userList[currUser]}/>
               <div className='item'>
               {foundWinner === true ? (
+              <div>
                 <div class="alert alert-success" role="alert">
                     FOUND WINNER: {winner} - {winnerVal}
                 </div>
+                <button onClick={onClickReset}>Click here to reset game!</button>
+              </div>
               ) : (
                 <ul>
                 <li>if you are X, you are first</li>

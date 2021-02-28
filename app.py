@@ -102,7 +102,9 @@ def on_win(value):
 @socketio.on('reset')
 def on_reset(): 
     print("reset")
-    socketio.emit('reset')
+    global player
+    player = "X"
+    socketio.emit('reset', broadcast=True, include_self=False)
 
 @socketio.on('update')
 def on_update(data): # data is whatever arg you pass in your emit call on client

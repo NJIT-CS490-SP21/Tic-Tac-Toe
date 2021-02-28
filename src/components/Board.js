@@ -44,16 +44,24 @@ export default function Board(prop) {
         const value = data.value;
         const updatedBoard = data.board;
         
+        let isEmpty = false;
+        
         if (isTurn){
-            const newBoard = updatedBoard.map((box,boxId) => {
+            let newBoard = updatedBoard;
+            updatedBoard.forEach((box, boxId) => {
             if (boxId === id) {
-                return value;
+                if (box === ''){
+                    isEmpty = true;
+                    newBoard[boxId] = value;
+                    return
+                }
+                
             }
-            return box;
             });
+
             
-            console.log("test board");
-            console.log(newBoard);
+            if (isEmpty){
+                console.log(newBoard);
             setBoard(newBoard);
             
             const winner = calculateWinner(newBoard);
@@ -64,8 +72,11 @@ export default function Board(prop) {
                     socket.emit('win', winner);
                     
                 } 
-            socket.emit('go', value);
-            socket.emit('update', { "id": id, "value": value, "board":newBoard });
+                socket.emit('go', value);
+                socket.emit('update', { "id": id, "value": value, "board":newBoard });
+                
+            }
+            
         }
         
     });
@@ -80,27 +91,64 @@ export default function Board(prop) {
         const id = data.id;
         const value = data.value;
         const updatedBoard = data.board;    
-        
+        /*
         const newBoard = updatedBoard.map((box,boxId) => {
             if (boxId === id) {
                 return value;
             }
             return box;
         });
-        socket.emit('go', value);
-        setBoard(newBoard);
+        */
+        let isEmpty = false;
         
-        const winner = calculateWinner(newBoard);
+        let newBoard = updatedBoard;
+            updatedBoard.forEach((box, boxId) => {
+            if (boxId === id) {
+                if (box === ''){
+                    isEmpty = true;
+                    newBoard[boxId] = value;
+                    return
+                }
+                
+            }
+            });
+        /*
+        const newBoard = updatedBoard.filter(box => box === '').map((box,boxId) => {
+                if (boxId === id) {
+                    console.log(" empty box");
+                    if (box === ''){
+                        isEmpty = true;
+                        
+                        return value;
+                    }
+                    else{
+                        console.log("not empty box");
+                                        
+                    }
+                }
+                return box;
+            });
+        */
+        console.log(newBoard);
+        if (isEmpty){
+            socket.emit('go', value);
+            setBoard(newBoard);
+        
+            const winner = calculateWinner(newBoard);
             
             let status;
                 if (winner) {
                     status = 'Winner: ' + winner;
                     socket.emit('win', winner);
                 } 
+        }
+        
     
     });
     
-    socket.on('update', (data) => {});
+    socket.on('reset', (data) => {
+        setBoard([``,``,``,``,``,``,``,``,``]);
+    });
     
   }, []);
   
