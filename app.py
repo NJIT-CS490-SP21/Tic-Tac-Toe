@@ -41,9 +41,9 @@ player = "X"
 # When a client connects from this Socket connection, this function is run
 @socketio.on('connect')
 def on_connect():
-    
     print("User connected!")
 # When a client disconnects from this Socket connection, this function is run
+
 @socketio.on('disconnect')
 def on_disconnect():
     print('User disconnected!')
@@ -59,6 +59,9 @@ def get_user_by_value(value):
 
 @socketio.on('login')
 def on_login(data):
+    global player
+    global user_list
+    player = "X"
     user_list = data['userList']
     socketio.emit('login',  data, broadcast=True, include_self=False)
     
@@ -70,28 +73,36 @@ def on_validate(data):
     box_id = data['id']
     board = data['board']
     
-    
     global player
     
     if value != player or value == "Spectator":
-        socketio.emit('validate',  {'isTurn': False, 'id':box_id, 'value': value, "board":board} ,  include_self=True)
+        data['isTurn'] = False
+        socketio.emit('validate', data, broadcast=True, include_self=True)
     else:
-        socketio.emit('validate',  {'isTurn': True, 'id': box_id, 'value': value, "board":board} ,  include_self=True)
-        if player == "X":
-            player = "O"
-        else:
-            player = "X"
-        
-        
-@socketio.on('go')
-def on_go(user): 
-    
-    print(user)
-    print(type(user))
-    
-    
-    #socketio.emit('go',  {'currPlayer': player} , broadcast=True, include_self=True)
+        data['isTurn'] = True
+        socketio.emit('validate', data, broadcast=True,  include_self=True)
 
+@socketio.on('go')
+def on_go(value): 
+    global player
+    if (value == "X"):
+        player = "O"
+    else:
+        player = "X"
+
+@socketio.on('win')
+def on_win(value): 
+    print("found winner")
+    data = {}
+    data['value'] = value
+    print(user_list)
+    data['user'] = get_user_by_value(value)
+    socketio.emit('win', data);    
+
+@socketio.on('reset')
+def on_reset(): 
+    print("reset")
+    socketio.emit('reset')
 
 @socketio.on('update')
 def on_update(data): # data is whatever arg you pass in your emit call on client

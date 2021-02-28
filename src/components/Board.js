@@ -10,39 +10,30 @@ export default function Board(prop) {
     const [check, setCheck] = useState(true);
     const [isTurn, setTurn] = useState(false);
     
-    function updateCheck(){
-        setCheck(!check);
+    const [foundWinner, setFoundWinner] = useState(false);
+    
+    function calculateWinner(updatedBoard) {
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (updatedBoard[a] && updatedBoard[a] === updatedBoard[b] && updatedBoard[a] === updatedBoard[c]) {
+      return updatedBoard[a];
     }
-    function _helper(id, value){
-        const newBoard = board.map((box,boxId) => {
-        if (boxId === id) {
-            return value;
-        }
-        return box;
-        });
-        return newBoard;
-    }
+  }
+  return null;
+}
     
     function updateBoard(id, check){
         socket.emit('validate', {'value':prop.value, 'id': id, "board":board});
-        
-        /*
-        const newBoard = board.map((box,boxId) => {
-            if (boxId === id) {
-                let newBox = `X`;
-                if (!check){
-                    newBox = `O`;
-                }
-            return newBox;
-            }
-            return box;
-        });
-        setBoard(newBoard);
-
-        socket.emit('update', { "id": id, "check": check, "board":newBoard });
-        setCheck(!check);
-        */
-        
     }
     
   useEffect(() => {
@@ -65,9 +56,16 @@ export default function Board(prop) {
             console.log(newBoard);
             setBoard(newBoard);
             
+            const winner = calculateWinner(newBoard);
+            
+            let status;
+                if (winner) {
+                    status = 'Winner: ' + winner;
+                    socket.emit('win', winner);
+                    
+                } 
             socket.emit('go', value);
             socket.emit('update', { "id": id, "value": value, "board":newBoard });
-            setCheck(!check);
         }
         
     });
@@ -82,7 +80,6 @@ export default function Board(prop) {
         const id = data.id;
         const value = data.value;
         const updatedBoard = data.board;    
-        setCheck(!check);
         
         const newBoard = updatedBoard.map((box,boxId) => {
             if (boxId === id) {
@@ -92,22 +89,34 @@ export default function Board(prop) {
         });
         socket.emit('go', value);
         setBoard(newBoard);
+        
+        const winner = calculateWinner(newBoard);
+            
+            let status;
+                if (winner) {
+                    status = 'Winner: ' + winner;
+                    socket.emit('win', winner);
+                } 
     
     });
+    
+    socket.on('update', (data) => {});
+    
   }, []);
   
   
   return (
-        <div className="board">
+        <div className="item">
+            <div className="board"> 
             {board.map((box,id) => {
                 return <Box 
                             key={id} 
                             updateBoard={updateBoard} 
                             id={id} 
-                            value={box} 
-                            isChecked={check} 
+                            value={box}
                         />
             })}
+            </div>
         </div>
     )
 }
