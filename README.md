@@ -13,11 +13,14 @@
     pip install -r requirements.txt
     
     # Run "echo "DANGEROUSLY_DISABLE_HOST_CHECK=true" > .env.development.local" in the project directory
-   
+
 ## Run Application
 1. Run command in terminal (in your project directory): `python app.py`
 2. Run command in another terminal, `cd` into the project directory, and run `npm run start`
 3. Preview web page in browser '/'
+
+## Known problems
+- Users do not know what error they are making if they do not follow the rules. Ideas about the solution is in the future enhancement section below
 
 ## Future Features
 - Prevent user from logging in if username input is empty. I will do conditional checking in the onClick function for the Login Button and have an alert displayed on the screen if the input is empty
