@@ -19,6 +19,9 @@
 2. Run command in another terminal, `cd` into the project directory, and run `npm run start`
 3. Preview web page in browser '/'
 
+## Check it out here
+https://morning-bastion-51590.herokuapp.com
+
 ## Known problems
 - Users do not know what error they are making if they do not follow the rules. Ideas about the solution is in the future enhancement section below
 
