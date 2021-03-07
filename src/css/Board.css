@@ -1,6 +1,6 @@
 .board {
-	width: 400px; /* Total horizontal dimensions */
-	height: 400px; /* Total vertical dimensions */
+	width: 300px; /* Total horizontal dimensions */
+	height: 300px; /* Total vertical dimensions */
 	display: grid; /* Enables CSS Grid */ 
 	grid-template-columns: repeat(3, 1fr); /* Total horizontal space broken into 3 columns */
   grid-template-rows: repeat(3, 1fr); /* Total vertical space broken into 3 rows */
@@ -10,7 +10,7 @@
 
 .box {
   border: 1px solid; /* Shows the lines in the CSS grid */
-  font-size: 40px;
+  font-size: 35px;
   border-color: red;
   animation-name: example;
   animation-duration: 2s;
