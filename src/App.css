@@ -36,3 +36,37 @@
     transform: rotate(360deg);
   }
 }
+
+.container {
+    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    align-items: center;
+}
+
+.item {
+    flex-grow: 1;
+    margin: 10px;
+    align-items: center;
+}
+
+.border {
+    border: 1px dotted; 
+}
+
+body {
+  font-family: 'Courier New', monospace;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-big {
+  font-size: 25px;
+}
+
+li {
+  font-size: 18px;
+}
