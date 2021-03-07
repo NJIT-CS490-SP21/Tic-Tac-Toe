@@ -52,7 +52,7 @@ How I solve it: </br>
 
 - When I deployed my updated application to Heroku, I got this error: **Your account has reached its concurrent builds limit** </br>
 How I solve it: </br>
-I canceled the current build and restart heroku again with the bewlo command</br>
+I canceled the current build and restart heroku again with the below command</br>
 
 > - heroku plugins:install heroku-builds </br>
 > - heroku builds:cancel </br>
