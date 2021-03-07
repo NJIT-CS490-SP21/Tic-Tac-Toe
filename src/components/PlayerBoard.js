@@ -5,43 +5,18 @@ const socket = io();
 
 export default function PlayerBoard() {
     const [isDisplayed, setIsDisplayed] = useState(false);
-    const [playerBoard, setPlayerBoard] = useState({});
+    const [users, setUsers] = useState([]);
+    const [scores, setScores] = useState([]);
     
     function onClickDisplay(){
         setIsDisplayed(!isDisplayed);
     }
     useEffect(() => {
         socket.on('player_board', (data) => {
-            setPlayerBoard(data['players']);
+            setUsers(data['users']);
+            setScores(data['scores'])
         });
     }, []);
-    
-    function getSortedPlayerBoard () {
-        var sorted = [];
-        for(let player in playerBoard) {
-        let score = playerBoard[player];
-        sorted[score] = player;
-        }
-        sorted.sort();
-        
-        console.log("SORT??")
-        console.log(sorted);
-        
-        let sortedBoard = [];
-        for(let score in sorted) {
-            let player = playerBoard[score];
-            sortedBoard.push(
-                <tr>
-                    <td>{player}</td>
-                    <td>{score}</td>
-                </tr>
-            )
-        }
-        
-        return sortedBoard;
-    }
-
-    
   
     return (
         <div className='item border'>
@@ -53,12 +28,21 @@ export default function PlayerBoard() {
             <table class="table">
             <thead>
                 <tr>
+                    <th scope="col">#</th>
                     <th scope="col">Username</th>
                     <th scope="col">Score</th>
                 </tr>
             </thead>
             <tbody>
-                {getSortedPlayerBoard()}
+                {users.map((user, index) => {
+                    return(
+                    <tr>
+                        <th scope="row">{index + 1}</th>
+                        <td>{user}</td>
+                        <td>{scores[index]}</td>
+                        </tr>
+                    )
+                })}
             </tbody>
             </table>
             </div>

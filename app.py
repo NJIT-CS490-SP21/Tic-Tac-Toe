@@ -46,14 +46,17 @@ def update_score(winner, loser):
 
 def get_player_board():
     all_players = db.session.query(models.Test).order_by(models.Test.score.desc())
-    users = {}
-    for p in all_players:
-        print(p.score)
-        users[p.username] = p.score
+    users = []
+    scores = []
     
-    print("Server side")
+    for p in all_players:
+        users.append(p.username)
+        scores.append(p.score)
+        
+    
+    print("Server")
     print(users)
-    return users
+    return {'users': users, 'scores': scores}
     
 @app.route('/', defaults={"filename": "index.html"})
 @app.route('/<path:filename>')
@@ -100,7 +103,7 @@ def on_login(data):
         db.session.add(new_user)
         db.session.commit()
 
-    socketio.emit('player_board', {'players': get_player_board()})
+    socketio.emit('player_board', get_player_board())
     
     socketio.emit('login',  data, broadcast=True, include_self=False)
 
@@ -165,7 +168,7 @@ def on_reset(data):
     player = "X"
     print(data)
     update_score(winner, loser)
-    socketio.emit('player_board', {'players': get_player_board()})
+    socketio.emit('player_board', get_player_board())
     socketio.emit('reset', broadcast=True, include_self=False)
     
 
