@@ -26,6 +26,8 @@
 4. heroku addons:create heroku-postgresql:hobby-dev
 5. Run heroku config in terminal and see the value for DATABASE_URL in the output. Copy paste that value (looks like 'postgress://...').
 6. Create a .env file and add set our var DATABASE_URL. Run touch .env && echo "DATABASE_URL='copy-paste-database-url-here'" > .env.
+7. Start your app (python app.py, npm run start in other terminal).
+8. Open 2 new tabs with console open.
 
 ## Check it out here - Sample heroku web app
 https://morning-bastion-51590.herokuapp.com
