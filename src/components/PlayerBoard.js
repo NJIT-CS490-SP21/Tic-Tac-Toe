@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 
 const socket = io(); 
 
-export default function PlayerBoard() {
+export default function PlayerBoard(prop) {
     const [isDisplayed, setIsDisplayed] = useState(false);
     const [users, setUsers] = useState([]);
     const [scores, setScores] = useState([]);
@@ -17,7 +17,13 @@ export default function PlayerBoard() {
             setScores(data['scores'])
         });
     }, []);
-  
+    
+    function highlightUser(user){
+        if (user === prop.currUser){
+            return "table-primary";
+        }
+        return "";
+    }
     return (
         <div className='item border'>
         <div className="item">
@@ -25,6 +31,7 @@ export default function PlayerBoard() {
         </div>
         {isDisplayed === true ? (
             <div className="item">
+            <p className="text-small font-italic">Current user is highlighted</p>
             <table class="table">
             <thead>
                 <tr>
@@ -36,11 +43,11 @@ export default function PlayerBoard() {
             <tbody>
                 {users.map((user, index) => {
                     return(
-                    <tr>
+                    <tr className={highlightUser(user)}>
                         <th scope="row">{index + 1}</th>
                         <td>{user}</td>
                         <td>{scores[index]}</td>
-                        </tr>
+                    </tr>
                     )
                 })}
             </tbody>

@@ -124,7 +124,7 @@ function App() {
                 </ul>
               )}
               </div>
-              <PlayerBoard/>
+              <PlayerBoard currUser={currUser}/>
             </div>
           ) : (
             <div>
