@@ -44,5 +44,5 @@ How I solved it: </br>
 I found this solution on Python’s official documents about modules: https://docs.python.org/3/tutorial/modules.html
 - Player Board is not sorted on the client side even though the query correctly return sorted results by score. The reason I found is that I use the dictionary/object data structure for the playerBoard state in PlayerBoard.js. When I iterate the playerBoard, I used Object.keys which return a sorted list of keys and map their values, instead of the initial board sorted by score.
 How I solve it: </br>
-> On the server side: the player_board event will return 2 arrays of users and scores which are created by the query. 
+> On the server side: the player_board event will return 2 arrays of users and scores which are created by the query. </br>
 > On the client side: I iterate through the 2 array by indexes and return the rows.
