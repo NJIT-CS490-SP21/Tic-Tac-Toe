@@ -19,7 +19,15 @@
 2. Run command in another terminal, `cd` into the project directory, and run `npm run start`
 3. Preview web page in browser '/'
 
-## Check it out here
+## Deploy to Heroku
+1. heroku create --buildpack heroku/python
+2. heroku buildpacks:add --index 1 heroku/nodejs
+3. git push heroku {your_branch_name}:main
+4. heroku addons:create heroku-postgresql:hobby-dev
+5. Run heroku config in terminal and see the value for DATABASE_URL in the output. Copy paste that value (looks like 'postgress://...').
+6. Create a .env file and add set our var DATABASE_URL. Run touch .env && echo "DATABASE_URL='copy-paste-database-url-here'" > .env.
+
+## Check it out here - Sample heroku web app
 https://morning-bastion-51590.herokuapp.com
 
 ## Known problems
