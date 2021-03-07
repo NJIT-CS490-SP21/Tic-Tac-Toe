@@ -35,7 +35,7 @@ socketio = SocketIO(
 )
 
 def update_score(winner, loser):
-    all_players = db.session.query(models.Test)
+    all_players = db.session.query(models.Player)
 
     winner_data = all_players.filter_by(username=winner).first()
     loser_data = all_players.filter_by(username=loser).first()
@@ -45,7 +45,7 @@ def update_score(winner, loser):
     db.session.commit()
 
 def get_player_board():
-    all_players = db.session.query(models.Test).order_by(models.Test.score.desc())
+    all_players = db.session.query(models.Player).order_by(models.Player.score.desc())
     users = []
     scores = []
     
@@ -93,13 +93,13 @@ def on_login(data):
     player = "X"
     user_list = data['userList']
     
-    all_players = db.session.query(models.Test)
+    all_players = db.session.query(models.Player)
     
     #Check if username is already exists:
     if bool(all_players.filter_by(username=data['newUser']).first()):
         print("Username exists")
     else:
-        new_user = models.Test(username=data['newUser'], score=100)
+        new_user = models.Player(username=data['newUser'], score=100)
         db.session.add(new_user)
         db.session.commit()
 
