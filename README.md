@@ -44,4 +44,4 @@ https://morning-bastion-51590.herokuapp.com
 - I was not able to disallow specific users from playing if it is not their turn. However, I figured that in order to to that, the implementation has to be done by the backend to keep track of the turns. I set up an event in the server side to validate each time the user asks if they can make a move. </br>
 The flow is: onClick handler => client: emit the validate event => server: validate the turn and emit a boolean in the validate event => client: receive the validate event and tell the user whether to move
 - Importing module: https://docs.python.org/3/tutorial/modules.html
-
+- Player Board is not sorted on the client side even though the query correctly return sorted results by score. The reason I found is that I use the dictionary/object data structure for the playerBoard state in PlayerBoard.js. When I iterate the playerBoard, I used Object.keys which return a sorted list of keys and map their values, instead of the initial board sorted by score.

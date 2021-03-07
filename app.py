@@ -51,6 +51,7 @@ def get_player_board():
         print(p.score)
         users[p.username] = p.score
     
+    print("Server side")
     print(users)
     return users
     

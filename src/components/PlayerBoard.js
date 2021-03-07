@@ -16,6 +16,33 @@ export default function PlayerBoard() {
         });
     }, []);
     
+    function getSortedPlayerBoard () {
+        var sorted = [];
+        for(let player in playerBoard) {
+        let score = playerBoard[player];
+        sorted[score] = player;
+        }
+        sorted.sort();
+        
+        console.log("SORT??")
+        console.log(sorted);
+        
+        let sortedBoard = [];
+        for(let score in sorted) {
+            let player = playerBoard[score];
+            sortedBoard.push(
+                <tr>
+                    <td>{player}</td>
+                    <td>{score}</td>
+                </tr>
+            )
+        }
+        
+        return sortedBoard;
+    }
+
+    
+  
     return (
         <div className='item border'>
         <div className="item">
@@ -31,16 +58,7 @@ export default function PlayerBoard() {
                 </tr>
             </thead>
             <tbody>
-                {console.log(playerBoard)}
-                {playerBoard.map((player) => {
-                    return (
-                        <tr>
-                            <td>{player}</td>
-                            <td>{playerBoard[player]}</td>
-                        </tr>
-                        )
-                }
-                )}
+                {getSortedPlayerBoard()}
             </tbody>
             </table>
             </div>
