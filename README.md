@@ -41,8 +41,8 @@ https://dry-beyond-09920.herokuapp.com
 - I ran into this error in my app,py: **“AttributeError: module 'models' has no attribute 'Person'”** </br>
 How I solved it: </br>
 
-> In app.py: add import importlib  and after the line import models , add this line importlib.reload(Person) </br>
-I found this solution on Python’s official documents about modules: https://docs.python.org/3/tutorial/modules.html
+> - In app.py: add import importlib  and after the line import models , add this line importlib.reload(Person) </br>
+> - I found this solution on Python’s official documents about modules: https://docs.python.org/3/tutorial/modules.html
 
 - Player Board is not sorted on the client side even though the query correctly return sorted results by score. The reason I found is that I use the dictionary/object data structure for the playerBoard state in PlayerBoard.js. When I iterate the playerBoard, I used Object.keys which return a sorted list of keys and map their values, instead of the initial board sorted by score.
 How I solve it: </br>
@@ -54,6 +54,6 @@ How I solve it: </br>
 How I solve it: </br>
 I canceled the current build and restart heroku again with the bewlo command</br>
 
-> heroku plugins:install heroku-builds </br>
-> heroku builds:cancel </br>
-> heroku restart </br>
+> - heroku plugins:install heroku-builds </br>
+> - heroku builds:cancel </br>
+> - heroku restart </br>
