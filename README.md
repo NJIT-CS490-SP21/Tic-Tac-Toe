@@ -38,11 +38,21 @@ https://dry-beyond-09920.herokuapp.com
 - Have an alert displayed out in the screen when an user attempts a move but it is not their turn. This feature can be implemented by having the backend doing the validation and emit an event to only the triggered browser with the attempted user. In the backend, one property in the even should be eliminated: broadcast=True.
 
 ## Technical Issues
-- I ran into this error in my app,py: “AttributeError: module 'models' has no attribute 'Person'” </br>
+- I ran into this error in my app,py: **“AttributeError: module 'models' has no attribute 'Person'”** </br>
 How I solved it: </br>
+
 > In app.py: add import importlib  and after the line import models , add this line importlib.reload(Person) </br>
 I found this solution on Python’s official documents about modules: https://docs.python.org/3/tutorial/modules.html
+
 - Player Board is not sorted on the client side even though the query correctly return sorted results by score. The reason I found is that I use the dictionary/object data structure for the playerBoard state in PlayerBoard.js. When I iterate the playerBoard, I used Object.keys which return a sorted list of keys and map their values, instead of the initial board sorted by score.
 How I solve it: </br>
+
 > On the server side: the player_board event will return 2 arrays of users and scores which are created by the query. </br>
 > On the client side: I iterate through the 2 array by indexes and return the rows.
+
+- When I deployed my updated application to Heroku, I got this error: **Your account has reached its concurrent builds limit** 
+How I solve it: I canceled the current build and restart heroku again with the bewlo command</br>
+
+> heroku plugins:install heroku-builds
+> heroku builds:cancel
+> heroku restart
