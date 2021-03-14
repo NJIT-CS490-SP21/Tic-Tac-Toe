@@ -7,9 +7,6 @@ const socket = io();
 
 export default function Board(prop) {
   const [board, setBoard] = useState([``, ``, ``, ``, ``, ``, ``, ``, ``]);
-  const [isTurn, setTurn] = useState(false);
-
-  const [foundWinner, setFoundWinner] = useState(false);
 
   function calculateWinner(updatedBoard) {
     const lines = [
@@ -42,7 +39,7 @@ export default function Board(prop) {
   function isBoardFull(updatedBoard) {
     console.log("TEST FUNCTION");
     const newBoard = updatedBoard.filter((box) => box === "");
-    if (newBoard.length == 0) {
+    if (newBoard.length === 0) {
       return true;
     }
     return false;
@@ -76,9 +73,9 @@ export default function Board(prop) {
 
           const winner = calculateWinner(newBoard);
 
-          let status;
+          //let status;
           if (winner) {
-            status = "Winner: " + winner;
+            //status = "Winner: " + winner;
             socket.emit("win", winner);
           }
 
@@ -94,9 +91,6 @@ export default function Board(prop) {
     });
 
     socket.on("update", (data) => {
-      //console.log('Chat event received!');
-      //console.log(board);
-      //console.log(data);
       const id = data.id;
       const value = data.value;
       const updatedBoard = data.board;
@@ -114,16 +108,15 @@ export default function Board(prop) {
         }
       });
 
-      //console.log(newBoard);
       if (isEmpty) {
         socket.emit("go", value);
         setBoard(newBoard);
 
         const winner = calculateWinner(newBoard);
 
-        let status;
+        //let status;
         if (winner) {
-          status = "Winner: " + winner;
+          //status = "Winner: " + winner;
           socket.emit("win", winner);
         }
 

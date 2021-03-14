@@ -64,3 +64,19 @@ Run in console the commands: </br>
   export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin`
   source ~/.bash_profile`
 ```
+- When I used eslint to clean my js files, I configured it to override the `react/jsx-filename-extension` rule. However I got this error: </br>
+
+```
+npx eslint src/App.js 
+
+Oops! Something went wrong! :(
+
+ESLint: 7.22.0
+
+Failed to read JSON file at /home/ec2-user/environment/classese-work/react-starter/.eslintrc.json:
+
+Cannot read config file: /home/ec2-user/environment/classese-work/react-starter/.eslintrc.json
+Error: Unexpected token } in JSON at position 178
+```
+What happened was that I had an extra comma in my json file that resulted in this error. I deleted it and it works fine now </br>
+

@@ -1,14 +1,12 @@
-import logo from "./logo.svg";
-import "./App.css";
+import './App.css';
 
-import React from "react";
-import { useState, useRef } from "react";
-import { useEffect } from "react";
-import io from "socket.io-client";
+import React, { useState, useRef, useEffect } from 'react';
 
-import Board from "./components/Board.js";
-import PlayerList from "./components/PlayerList.js";
-import PlayerBoard from "./components/PlayerBoard.js";
+import io from 'socket.io-client';
+
+import Board from './components/Board';
+import PlayerList from './components/PlayerList';
+import PlayerBoard from './components/PlayerBoard';
 
 const socket = io();
 
@@ -17,10 +15,10 @@ function App() {
   const [isLoggedIn, setLogIn] = useState(false);
   const [userList, setUserList] = useState({});
   const [userCount, setUserCount] = useState(0);
-  const [currUser, setCurrUser] = useState("");
+  const [currUser, setCurrUser] = useState('');
   const [foundWinner, setFoundWinner] = useState(false);
-  const [winner, setWinner] = useState("");
-  const [winnerVal, setWinnerVal] = useState("");
+  const [winner, setWinner] = useState('');
+  const [winnerVal, setWinnerVal] = useState('');
   const [isBoardFull, setBoardFull] = useState(false);
 
   function logInButton() {
@@ -28,17 +26,17 @@ function App() {
     setUserList((prevList) => {
       const listCopy = { ...prevList };
 
-      let role = "";
-      if (userCount == 0) {
-        role = "X";
-      } else if (userCount == 1) {
-        role = "O";
+      let role = '';
+      if (userCount === 0) {
+        role = 'X';
+      } else if (userCount === 1) {
+        role = 'O';
       } else if (userCount > 1) {
-        role = "Spectator";
+        role = 'Spectator';
       }
       listCopy[userText] = role;
       setUserCount((prevCount) => prevCount + 1);
-      socket.emit("login", { userList: listCopy, newUser: userText });
+      socket.emit('login', { userList: listCopy, newUser: userText });
       return listCopy;
     });
     setCurrUser(userText);
@@ -46,34 +44,34 @@ function App() {
   }
 
   function onClickReset() {
-    socket.emit("reset", { found_winner: foundWinner, winner: winner });
+    socket.emit('reset', { found_winner: foundWinner, winner });
     setFoundWinner(false);
     setBoardFull(false);
   }
 
   useEffect(() => {
-    socket.on("login", (data) => {
+    socket.on('login', (data) => {
       const updatedList = data.userList;
       setUserList(updatedList);
       setUserCount((prevCount) => prevCount + 1);
-      socket.emit("start");
+      socket.emit('start');
     });
 
-    socket.on("win", (data) => {
-      const winner = data.winner;
-      const value = data.value;
+    socket.on('win', (data) => {
+      const { win } = data;
+      const { value } = data;
 
-      setWinner(winner);
+      setWinner(win);
       setWinnerVal(value);
 
       setFoundWinner(true);
     });
 
-    socket.on("full", (data) => {
+    socket.on('full', () => {
       setBoardFull(true);
     });
 
-    socket.on("reset", (data) => {
+    socket.on('reset', () => {
       setFoundWinner(false);
       setBoardFull(false);
     });
@@ -86,13 +84,13 @@ function App() {
           rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css"
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
-          crossorigin="anonymous"
+          crossOrigin="anonymous"
         />
       </head>
       <body>
         <h1 className="font-weight-bold">Tic Tac Toe</h1>
         {isLoggedIn === true ? (
-          <div class="container">
+          <div className="container">
             <div className="item border">
               <PlayerList userList={userList} />
             </div>
@@ -100,10 +98,17 @@ function App() {
             <div className="item border">
               {foundWinner === true ? (
                 <div>
-                  <div class="text-big" role="alert">
-                    FOUND WINNER: {winner} - {winnerVal}
+                  <div className="text-big" role="alert">
+                    FOUND WINNER:
+                    {' '}
+                    {winner}
+                    {' '}
+                    -
+                    {' '}
+                    {winnerVal}
                   </div>
                   <button
+                    type="button"
                     className="btn btn-primary btn-sm"
                     onClick={onClickReset}
                   >
@@ -112,10 +117,11 @@ function App() {
                 </div>
               ) : isBoardFull === true ? (
                 <div>
-                  <div class="text-big" role="alert">
+                  <div className="text-big" role="alert">
                     BOARD FULL!
                   </div>
                   <button
+                    type="button"
                     className="btn btn-primary btn-sm"
                     onClick={onClickReset}
                   >
@@ -125,7 +131,9 @@ function App() {
               ) : (
                 <ul>
                   <p className="text-bold text-big">
-                    Your role is {userList[currUser]}
+                    Your role is
+                    {' '}
+                    {userList[currUser]}
                   </p>
                   <li className="text-small list-group-item">
                     Game only starts when there are at least 2 users
@@ -134,10 +142,10 @@ function App() {
                     If you are X, you are first
                   </li>
                   <li className="text-small list-group-item">
-                    You can only play if it's your turn
+                    You can only play if it&apos;s your turn
                   </li>
                   <li className="text-small list-group-item">
-                    If you're a Spectator, you cant make a move
+                    If you&apos;re a Spectator, you cant make a move
                   </li>
                 </ul>
               )}
@@ -151,7 +159,7 @@ function App() {
               type="text"
               placeholder="Enter your username"
             />
-            <button className="btn btn-primary" onClick={logInButton}>
+            <button type="button" className="btn btn-primary" onClick={logInButton}>
               Log In
             </button>
           </div>

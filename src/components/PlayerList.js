@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../css/PlayerList.css";
 export default function PlayerList(prop) {
   return (
