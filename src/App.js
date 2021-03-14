@@ -96,8 +96,11 @@ function App() {
             </div>
             <Board currUser={currUser} value={userList[currUser]} />
             <div className="item border">
-              {foundWinner === true ? (
-                <div>
+              {
+                (function(){
+                  if (foundWinner){
+                    return(
+                      <div>
                   <div className="text-big" role="alert">
                     FOUND WINNER:
                     {' '}
@@ -115,8 +118,11 @@ function App() {
                     Click here to reset game!
                   </button>
                 </div>
-              ) : isBoardFull === true ? (
-                <div>
+                    )
+                  }
+                  else if (isBoardFull){
+                    return(
+                    <div>
                   <div className="text-big" role="alert">
                     BOARD FULL!
                   </div>
@@ -127,9 +133,11 @@ function App() {
                   >
                     Click here to reset game!
                   </button>
-                </div>
-              ) : (
-                <ul>
+                </div>)
+                  }
+                  else{
+                    return(
+                    <ul>
                   <p className="text-bold text-big">
                     Your role is
                     {' '}
@@ -148,7 +156,10 @@ function App() {
                     If you&apos;re a Spectator, you cant make a move
                   </li>
                 </ul>
-              )}
+                    )
+                  }
+                })
+              }
             </div>
             <PlayerBoard currUser={currUser} />
           </div>
