@@ -27,3 +27,4 @@ project2_env/
 
 src/__pycache__/
 *.pyc
+.prettierignore
