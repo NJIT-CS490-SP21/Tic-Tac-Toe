@@ -92,6 +92,7 @@ function App() {
           crossorigin="anonymous"/>
       </head>
       <body>
+          <p>Check automatic deploys</p>
           <h1 className="font-weight-bold">Tic Tac Toe</h1>
           {isLoggedIn === true ? (
             <div class='container'>
