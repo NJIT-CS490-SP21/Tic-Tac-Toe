@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import "../css/Board.css";
-import Box from "./Box.js";
-import io from "socket.io-client";
+import React, { useState, useEffect } from 'react';
+import '../css/Board.css';
+import io from 'socket.io-client';
+import Box from './Box';
 
 const socket = io();
 
 export default function Board(prop) {
-  const [board, setBoard] = useState([``, ``, ``, ``, ``, ``, ``, ``, ``]);
+  const [board, setBoard] = useState(['', '', '', '', '', '', '', '', '']);
 
   function calculateWinner(updatedBoard) {
     const lines = [
@@ -19,12 +19,12 @@ export default function Board(prop) {
       [0, 4, 8],
       [2, 4, 6],
     ];
-    for (let i = 0; i < lines.length; i++) {
+    for (let i = 0; i < lines.length; i += 1) {
       const [a, b, c] = lines[i];
       if (
-        updatedBoard[a] &&
-        updatedBoard[a] === updatedBoard[b] &&
-        updatedBoard[a] === updatedBoard[c]
+        updatedBoard[a]
+        && updatedBoard[a] === updatedBoard[b]
+        && updatedBoard[a] === updatedBoard[c]
       ) {
         return updatedBoard[a];
       }
@@ -32,13 +32,12 @@ export default function Board(prop) {
     return null;
   }
 
-  function updateBoard(id, check) {
-    socket.emit("validate", { value: prop.value, id: id, board: board });
+  function updateBoard(id) {
+    socket.emit('validate', { value: prop.value, id, board });
   }
 
   function isBoardFull(updatedBoard) {
-    console.log("TEST FUNCTION");
-    const newBoard = updatedBoard.filter((box) => box === "");
+    const newBoard = updatedBoard.filter((box) => box === '');
     if (newBoard.length === 0) {
       return true;
     }
@@ -46,98 +45,94 @@ export default function Board(prop) {
   }
 
   useEffect(() => {
-    socket.on("validate", (data) => {
-      //console.log(data);
-      const isTurn = data.isTurn;
-      const id = data.id;
-      const value = data.value;
+    socket.on('validate', (data) => {
+      // console.log(data);
+      const { isTurn } = data;
+      const { id } = data;
+      const { value } = data;
       const updatedBoard = data.board;
 
       let isEmpty = false;
 
       if (isTurn) {
-        let newBoard = updatedBoard;
+        const newBoard = updatedBoard;
         updatedBoard.forEach((box, boxId) => {
           if (boxId === id) {
-            if (box === "") {
+            if (box === '') {
               isEmpty = true;
               newBoard[boxId] = value;
-              return;
             }
           }
         });
 
         if (isEmpty) {
-          //console.log(newBoard);
+          // console.log(newBoard);
           setBoard(newBoard);
 
           const winner = calculateWinner(newBoard);
 
-          //let status;
+          // let status;
           if (winner) {
-            //status = "Winner: " + winner;
-            socket.emit("win", winner);
+            // status = "Winner: " + winner;
+            socket.emit('win', winner);
           }
 
           const isFull = isBoardFull(newBoard);
           if (isFull) {
-            socket.emit("full");
+            socket.emit('full');
           }
 
-          socket.emit("go", value);
-          socket.emit("update", { id: id, value: value, board: newBoard });
+          socket.emit('go', value);
+          socket.emit('update', { id, value, board: newBoard });
         }
       }
     });
 
-    socket.on("update", (data) => {
-      const id = data.id;
-      const value = data.value;
+    socket.on('update', (data) => {
+      const { id } = data;
+      const { value } = data;
       const updatedBoard = data.board;
 
       let isEmpty = false;
 
-      let newBoard = updatedBoard;
+      const newBoard = updatedBoard;
       updatedBoard.forEach((box, boxId) => {
         if (boxId === id) {
-          if (box === "") {
+          if (box === '') {
             isEmpty = true;
             newBoard[boxId] = value;
-            return;
           }
         }
       });
 
       if (isEmpty) {
-        socket.emit("go", value);
+        socket.emit('go', value);
         setBoard(newBoard);
 
         const winner = calculateWinner(newBoard);
 
-        //let status;
+        // let status;
         if (winner) {
-          //status = "Winner: " + winner;
-          socket.emit("win", winner);
+          // status = "Winner: " + winner;
+          socket.emit('win', winner);
         }
 
         const isFull = isBoardFull(newBoard);
         if (isFull) {
-          socket.emit("full");
+          socket.emit('full');
         }
       }
     });
 
-    socket.on("reset", (data) => {
-      setBoard([``, ``, ``, ``, ``, ``, ``, ``, ``]);
+    socket.on('reset', () => {
+      setBoard(['', '', '', '', '', '', '', '', '']);
     });
   }, []);
 
   return (
     <div className="item">
       <div className="board">
-        {board.map((box, id) => {
-          return <Box key={id} updateBoard={updateBoard} id={id} value={box} />;
-        })}
+        {board.map((box, id) => <Box key={id} updateBoard={updateBoard} id={id} value={box} />)}
       </div>
     </div>
   );
