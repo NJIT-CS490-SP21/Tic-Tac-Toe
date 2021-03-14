@@ -46,14 +46,16 @@ https://floating-thicket-90560.herokuapp.com
 - I had an error when I tried to install yapf. What I did was that I upgraded my pip and source the .bash_profil with the wrong path for my new pip. </br>
 The error message was: </br>
   
-`$ export PATH=$HOME/usr/local/bin/pip`
-`vocstartsoft:~/environment/classese-work/react-starter $ source ~/.bash_profile`
-`bash: git: command not found`
-`/home/linuxbrew/.linuxbrew/bin/brew: line 16: readlink: command not found`
-`/home/linuxbrew/.linuxbrew/bin/brew: line 17: dirname: command not found`
-`/home/linuxbrew/.linuxbrew/bin/brew: line 113: /home/linuxbrew/.linuxbrew/Library/Homebrew/brew.sh: No such file or directory </br>`
-`bash: uname: command not found`
-`bash: ps: command not found`
+```
+$ export PATH=$HOME/usr/local/bin/pip
+vocstartsoft:~/environment/classese-work/react-starter $ source ~/.bash_profile
+bash: git: command not found
+/home/linuxbrew/.linuxbrew/bin/brew: line 16: readlink: command not found
+/home/linuxbrew/.linuxbrew/bin/brew: line 17: dirname: command not found
+/home/linuxbrew/.linuxbrew/bin/brew: line 113: /home/linuxbrew/.linuxbrew/Library/Homebrew/brew.sh: No such file or directory </br>
+bash: uname: command not found
+bash: ps: command not found 
+```
 
 How I solved it: </br>
 I followed [a stackoverflow's similar post](https://stackoverflow.com/a/21499850/15218088) </br>
