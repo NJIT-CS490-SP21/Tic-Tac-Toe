@@ -1,6 +1,7 @@
 # Flask and create-react-app
 
 ## Requirements
+
 1. `npm install`
 2. `pip install -r requirements.txt`
 
@@ -11,15 +12,17 @@
 
     # Install required Python packages
     pip install -r requirements.txt
-    
+
     # Run "echo "DANGEROUSLY_DISABLE_HOST_CHECK=true" > .env.development.local" in the project directory
 
 ## Run Application
+
 1. Run command in terminal (in your project directory): `python app.py`
 2. Run command in another terminal, `cd` into the project directory, and run `npm run start`
 3. Preview web page in browser '/'
 
 ## Deploy to Heroku
+
 1. heroku create --buildpack heroku/python
 2. heroku buildpacks:add --index 1 heroku/nodejs
 3. git push heroku {your_branch_name}:main
@@ -30,30 +33,30 @@
 8. Open 2 new tabs with console open.
 
 ## Check it out here - Sample heroku web app
+
 https://floating-thicket-90560.herokuapp.com
 
 ## Future Features
+
 - Prevent user from logging in if username input is empty. I will do conditional checking in the onClick function for the Login Button and have an alert displayed on the screen if the input is empty
 - Implement a history of moves so for all users to see. I will have another state variable in either Board.js or App.js to keep track of past moves and use socket to update the list across all users.
 - Have an alert displayed out in the screen when an user attempts a move but it is not their turn. This feature can be implemented by having the backend doing the validation and emit an event to only the triggered browser with the attempted user. In the backend, one property in the even should be eliminated: broadcast=True.
 
 ## Technical Issues
-- I ran into this error in my app,py: **“AttributeError: module 'models' has no attribute 'Person'”** </br>
+- I had an error when I tried to install yapf. What I did was that I upgraded my pip and source the .bash_profil with the wrong path for my new pip. </br>
+The error message was: </br>
+  
+`$ export PATH=$HOME/usr/local/bin/pip`
+`vocstartsoft:~/environment/classese-work/react-starter $ source ~/.bash_profile`
+`bash: git: command not found`
+`/home/linuxbrew/.linuxbrew/bin/brew: line 16: readlink: command not found`
+`/home/linuxbrew/.linuxbrew/bin/brew: line 17: dirname: command not found`
+`/home/linuxbrew/.linuxbrew/bin/brew: line 113: /home/linuxbrew/.linuxbrew/Library/Homebrew/brew.sh: No such file or directory </br>`
+`bash: uname: command not found`
+`bash: ps: command not found`
+
 How I solved it: </br>
-
-> - In app.py: add import importlib  and after the line import models , add this line importlib.reload(Person) </br>
-> - I found this solution on Python’s official documents about modules: https://docs.python.org/3/tutorial/modules.html
-
-- Player Board is not sorted on the client side even though the query correctly return sorted results by score. The reason I found is that I use the dictionary/object data structure for the playerBoard state in PlayerBoard.js. When I iterate the playerBoard, I used Object.keys which return a sorted list of keys and map their values, instead of the initial board sorted by score.
-How I solve it: </br>
-
-> - On the server side: the player_board event will return 2 arrays of users and scores which are created by the query. </br>
-> - On the client side: I iterate through the 2 array by indexes and return the rows.
-
-- When I deployed my updated application to Heroku, I got this error: **Your account has reached its concurrent builds limit** </br>
-How I solve it: </br>
-I canceled the current build and restart heroku again with the below command</br>
-
-> - heroku plugins:install heroku-builds </br>
-> - heroku builds:cancel </br>
-> - heroku restart </br>
+I followed [a stackoverflow's similar post](https://stackoverflow.com/a/21499850/15218088) </br>
+> Run in console the commands: </br>
+  > `export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin`
+  > `source ~/.bash_profile`
