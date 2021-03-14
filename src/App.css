@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  text-align: center !important;
 }
 
 .App-logo {
@@ -40,8 +40,8 @@
 .container {
     display: flex;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
     align-items: center;
 }
 
@@ -55,8 +55,9 @@
     border: 1px dotted; 
 }
 
-body {
-  font-family: 'Courier New', monospace;
+body{
+  font-family: 'Courier New', monospace !important;
+  text-align: center !important;
 }
 
 .text-bold {
@@ -64,8 +65,13 @@ body {
 }
 
 .text-big {
-  font-size: 25px;
+  font-size: 18px;
 }
+
+.text-small {
+  font-size: 14px;
+}
+
 
 li {
   font-size: 18px;

@@ -8,6 +8,7 @@ import io from 'socket.io-client';
 
 import Board from './components/Board.js';
 import PlayerList from './components/PlayerList.js';
+import PlayerBoard from './components/PlayerBoard.js';
 
 const socket = io(); 
 
@@ -21,7 +22,7 @@ function App() {
   const [winner, setWinner] = useState('');
   const [winnerVal, setWinnerVal] = useState('');
   const [isBoardFull, setBoardFull] = useState(false);
-  const [start, setStart] = useState(false);
+  
   
   function logInButton(){
     const userText = inputRef.current.value;
@@ -48,15 +49,13 @@ function App() {
   }
 
   function onClickReset(){
-    socket.emit("reset");
+    socket.emit("reset", {"found_winner": foundWinner, "winner": winner});
     setFoundWinner(false);
     setBoardFull(false);
   }
   
   useEffect(() => {
     socket.on('login', (data) => {
-        console.log('login event received!');
-        console.log(data);
         const updatedList = data.userList;
         setUserList(updatedList);
         setUserCount((prevCount) => prevCount+1);
@@ -64,7 +63,7 @@ function App() {
     });
     
     socket.on('win', (data) => {
-      const winner = data.user;
+      const winner = data.winner;
       const value = data.value;
       
       setWinner(winner);
@@ -81,7 +80,6 @@ function App() {
       setFoundWinner(false);
       setBoardFull(false);
     });
-    
   }, []);
   
   return (
@@ -94,7 +92,7 @@ function App() {
           crossorigin="anonymous"/>
       </head>
       <body>
-          <h1>Tic Tac Toe</h1>
+          <h1 className="font-weight-bold">Tic Tac Toe</h1>
           {isLoggedIn === true ? (
             <div class='container'>
               <div className='item border'>
@@ -107,30 +105,31 @@ function App() {
                 <div class="text-big" role="alert">
                     FOUND WINNER: {winner} - {winnerVal}
                 </div>
-                <button onClick={onClickReset}>Click here to reset game!</button>
+                <button className="btn btn-primary btn-sm" onClick={onClickReset}>Click here to reset game!</button>
               </div>
               ) : isBoardFull === true ? (
                 <div>
                 <div class="text-big" role="alert">
                     BOARD FULL!
                 </div>
-                <button onClick={onClickReset}>Click here to reset game!</button>
+                <button className="btn btn-primary btn-sm" onClick={onClickReset}>Click here to reset game!</button>
               </div>
               ) : (
                 <ul>
                 <p className="text-bold text-big">Your role is {userList[currUser]}</p>
-                <li>Game only starts when there are at least 2 users</li>
-                <li>If you are X, you are first</li>
-                <li>You can only play if it's your turn</li>
-                <li>If you're a Spectator, you cant make a move</li>
+                <li className="text-small list-group-item">Game only starts when there are at least 2 users</li>
+                <li className="text-small list-group-item">If you are X, you are first</li>
+                <li className="text-small list-group-item">You can only play if it's your turn</li>
+                <li className="text-small list-group-item">If you're a Spectator, you cant make a move</li>
                 </ul>
               )}
               </div>
+              <PlayerBoard currUser={currUser}/>
             </div>
           ) : (
             <div>
               <input ref={inputRef} type="text" placeholder="Enter your username"/>
-              <button onClick={logInButton}>Log In</button>
+              <button className="btn btn-primary" onClick={logInButton}>Log In</button>
             </div>
           )}
       </body>
