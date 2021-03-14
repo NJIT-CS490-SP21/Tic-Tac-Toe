@@ -38,25 +38,25 @@
 }
 
 .container {
-    display: flex;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr;
-    align-items: center;
+  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  align-items: center;
 }
 
 .item {
-    flex-grow: 1;
-    margin: 10px;
-    align-items: center;
+  flex-grow: 1;
+  margin: 10px;
+  align-items: center;
 }
 
 .border {
-    border: 1px dotted; 
+  border: 1px dotted;
 }
 
-body{
-  font-family: 'Courier New', monospace !important;
+body {
+  font-family: "Courier New", monospace !important;
   text-align: center !important;
 }
 
@@ -71,7 +71,6 @@ body{
 .text-small {
   font-size: 14px;
 }
-
 
 li {
   font-size: 18px;

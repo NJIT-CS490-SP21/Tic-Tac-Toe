@@ -1,9 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
-export default function ListItem(prop)  {
-    return (
-        <li>
-        {prop.name}
-        </li>
-    )
+export default function ListItem(prop) {
+  return <li>{prop.name}</li>;
 }

@@ -7,13 +7,13 @@
 
 ## Setup
 
-    # Clone the code repository
+    Clone the code repository
     git clone https://github.com/NJIT-CS490-SP21/project1-tn224.git
 
-    # Install required Python packages
+    Install required Python packages
     pip install -r requirements.txt
 
-    # Run "echo "DANGEROUSLY_DISABLE_HOST_CHECK=true" > .env.development.local" in the project directory
+    Run "echo "DANGEROUSLY_DISABLE_HOST_CHECK=true" > .env.development.local" in the project directory
 
 ## Run Application
 
@@ -59,6 +59,8 @@ bash: ps: command not found
 
 How I solved it: </br>
 I followed [a stackoverflow's similar post](https://stackoverflow.com/a/21499850/15218088) </br>
-> Run in console the commands: </br>
-  > `export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin`
-  > `source ~/.bash_profile`
+Run in console the commands: </br>
+```
+  export PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin`
+  source ~/.bash_profile`
+```

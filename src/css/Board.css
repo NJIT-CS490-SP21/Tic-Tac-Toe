@@ -1,9 +1,15 @@
 .board {
-	width: 300px; /* Total horizontal dimensions */
-	height: 300px; /* Total vertical dimensions */
-	display: grid; /* Enables CSS Grid */ 
-	grid-template-columns: repeat(3, 1fr); /* Total horizontal space broken into 3 columns */
-  grid-template-rows: repeat(3, 1fr); /* Total vertical space broken into 3 rows */
+  width: 300px; /* Total horizontal dimensions */
+  height: 300px; /* Total vertical dimensions */
+  display: grid; /* Enables CSS Grid */
+  grid-template-columns: repeat(
+    3,
+    1fr
+  ); /* Total horizontal space broken into 3 columns */
+  grid-template-rows: repeat(
+    3,
+    1fr
+  ); /* Total vertical space broken into 3 rows */
   text-align: center;
   vertical-align: middle;
 }
@@ -17,9 +23,12 @@
   animation-iteration-count: infinite;
 }
 
- /* The animation code */
+/* The animation code */
 @keyframes example {
-  from {border-color: red;}
-  to {border-color: yellow;}
+  from {
+    border-color: red;
+  }
+  to {
+    border-color: yellow;
+  }
 }
-
