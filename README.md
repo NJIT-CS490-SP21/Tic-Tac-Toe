@@ -30,7 +30,7 @@
 8. Open 2 new tabs with console open.
 
 ## Check it out here - Sample heroku web app
-https://dry-beyond-09920.herokuapp.com
+https://floating-thicket-90560.herokuapp.com
 
 ## Future Features
 - Prevent user from logging in if username input is empty. I will do conditional checking in the onClick function for the Login Button and have an alert displayed on the screen if the input is empty
