@@ -53,9 +53,8 @@ def get_player_board():
         users.append(p.username)
         scores.append(p.score)
         
-    
-    print("Server")
-    print(users)
+    #print("Server")
+    #print(users)
     return {'users': users, 'scores': scores}
     
 @app.route('/', defaults={"filename": "index.html"})
@@ -163,7 +162,7 @@ def on_full():
 
 @socketio.on('reset')
 def on_reset(data): 
-    print("reset")
+    #print("reset")
     global player
     player = "X"
     print(data)
