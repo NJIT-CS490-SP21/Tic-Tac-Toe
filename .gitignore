@@ -29,3 +29,4 @@ src/__pycache__/
 *.pyc
 .prettierignore
 .eslintignore
+.pylintrc
