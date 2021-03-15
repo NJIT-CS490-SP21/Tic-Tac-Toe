@@ -283,6 +283,7 @@ def on_update(
 
 # pylint: disable=invalid-envvar-default
 if __name__ == "__main__":
+    
     # Note that we don't call app.run anymore. We call socketio.run with app arg
     SOCKETIO.run(
         APP,

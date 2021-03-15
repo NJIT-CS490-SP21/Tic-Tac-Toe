@@ -3,7 +3,6 @@ Module contains Player model for database
 """
 from app import DB
 
-
 # pylint: disable=no-member
 class Player(DB.Model):
     """
