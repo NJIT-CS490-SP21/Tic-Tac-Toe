@@ -9,7 +9,7 @@ from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv, find_dotenv
-import models
+
 
 load_dotenv(find_dotenv())
 
@@ -21,7 +21,8 @@ APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 DB = SQLAlchemy(APP)
-
+# pylint: disable=wrong-import-position
+import models
 importlib.reload(models)
 DB.create_all()
 # IMPORTANT: This must be AFTER creating db variable to prevent
@@ -34,26 +35,32 @@ SOCKETIO = SocketIO(APP,
                     cors_allowed_origins="*",
                     json=json,
                     manage_session=False)
-
-
+def get_user_data(username):
+    """
+    This method is to get model Player by username
+    @param username
+    """
+    all_players = DB.session.query(models.Player)
+    user_data = all_players.filter_by(username=username).first()
+    print(type(user_data))
+    return user_data
 def update_score(winner, loser):
     """
     This method is to update score of users in database
     @param winner: username of winner
     @param loser: username of loser
     """
-    all_players = DB.session.query(models.Player)
-
-    winner_data = all_players.filter_by(username=winner).first()
-    loser_data = all_players.filter_by(username=loser).first()
-
+    winner_data = get_user_data(winner)
+    loser_data = get_user_data(loser)
     winner_data.score += 1
     loser_data.score -= 1
     DB.session.commit()
-
 def add_user(username):
+    """
+    This method is to add new user to database
+    @param username
+    """
     all_players = DB.session.query(models.Player)
-    
     #Check if username is already exists:
     if bool(all_players.filter_by(username=username).first()):
         print("Username exists")
@@ -61,13 +68,11 @@ def add_user(username):
         new_user = models.Player(username=username, score=100)
         DB.session.add(new_user)
         DB.session.commit()
-    
-    updated_players = DB.session.query(models.Player)
+    updated_players = models.Player.query.all()
     users = []
     for person in updated_players:
         users.append(person.username)
     return users
-    
 def get_player_board():
     """
     This method is to query the list of all users in database
@@ -96,7 +101,7 @@ USER_LIST = {}
 PLAYER = "X"
 WINNER = ""
 LOSER = ""
-
+    
 @SOCKETIO.on('connect')
 def on_connect():
     """
@@ -135,14 +140,14 @@ def on_login(data):
     global PLAYER
     global USER_LIST
     PLAYER = "X"
-    USER_LIST = data['userList']
     
+    #USER_LIST = data['userList']
+    USER_LIST = update_user_list(data['newUser'], data['role'], data['userList'])
+
     add_user(data['newUser'])
-    
     SOCKETIO.emit('player_board', get_player_board())
-
     SOCKETIO.emit('login', data, broadcast=True, include_self=False)
-
+    
 
 @SOCKETIO.on('start')
 def on_start():
@@ -151,7 +156,16 @@ def on_start():
     """
     SOCKETIO.emit('start', broadcast=True)
 
-
+def update_user_list(username, role, user_list):
+    user_list[username] = role
+    return user_list
+    
+def is_turn(value, curr_player, user_list):
+    if len(user_list) < 2 or value != curr_player or value == "Spectator":
+        return False
+    else:
+        return True
+        
 @SOCKETIO.on('validate')
 def on_validate(data):
     """
@@ -159,7 +173,7 @@ def on_validate(data):
     """
     # pylint: disable=global-statement
     value = data['value']
-
+    
     global PLAYER
     global USER_LIST
 
@@ -183,7 +197,13 @@ def on_go(value):
     else:
         PLAYER = "X"
 
-
+def set_game_result(winner, winner_value):
+    if winner_value == "X":
+        loser = get_user_by_value("O")
+    else:
+        loser = get_user_by_value("X")
+    return {'winner': winner, 'loser': loser}
+    
 @SOCKETIO.on('win')
 def on_win(value):
     """
@@ -195,17 +215,21 @@ def on_win(value):
 
     data = {}
     data['value'] = value
+    
     WINNER = get_user_by_value(value)
-
+    """
     if value == "X":
         LOSER = get_user_by_value("O")
     else:
         LOSER = get_user_by_value("X")
-
+    """
+    result = set_game_result(WINNER, value)
+    #WINNER = result['winner']
+    LOSER = result['loser']
+    
     data['winner'] = WINNER
 
     SOCKETIO.emit('win', data)
-
 
 @SOCKETIO.on('full')
 def on_full():
@@ -240,8 +264,11 @@ def on_update(data):  # data is whatever arg you pass in your emit call on clien
     SOCKETIO.emit('update', data, broadcast=True, include_self=False)
 
 # pylint: disable=invalid-envvar-default
-SOCKETIO.run(
-    APP,
-    host=os.getenv('IP', '0.0.0.0'),
-    port=8081 if os.getenv("C9_PORT") else int(os.getenv("PORT", 8081)),
-)
+if __name__ == "__main__":
+# Note that we don't call app.run anymore. We call socketio.run with app arg
+    SOCKETIO.run(
+        APP,
+        host=os.getenv('IP', '0.0.0.0'),
+        port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
+    )
+    

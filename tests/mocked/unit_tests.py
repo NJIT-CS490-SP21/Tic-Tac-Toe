@@ -1,5 +1,5 @@
 """
-Mocked test cases
+Unit tests for mocked cases
 """
 import unittest
 from unittest.mock import patch
@@ -7,7 +7,7 @@ import os
 import sys
 
 # This lets you import from the parent directory (one level up)
-sys.path.append(os.path.abspath('../'))
+sys.path.append(os.path.abspath('../../'))
 # pylint: disable=wrong-import-position
 from app import add_user, get_user_data
 # pylint: disable=wrong-import-position

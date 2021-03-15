@@ -80,3 +80,9 @@ Error: Unexpected token } in JSON at position 178
 ```
 What happened was that I had an extra comma in my json file that resulted in this error. I deleted it and it works fine now </br>
 
+- When I did a unit test for my Log in Button component in the UI, I got the error: ` TypeError: expect(...).toBeInTheDocument is not a function`. </br>
+The error was because toBeInTheDocument is not part of react-testing-library. I need to install jest-dom to enable it. </br>
+How I solved it: </br>
+I followed [a stackoverflow's similar post](https://stackoverflow.com/questions/56547215/react-testing-library-why-is-tobeinthedocument-not-a-function) </br>
+I added this line to my App.test.js file to include the jest-dom:
+`import '@testing-library/jest-dom'`

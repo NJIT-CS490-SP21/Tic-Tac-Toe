@@ -36,7 +36,7 @@ function App() {
       }
       listCopy[userText] = role;
       setUserCount((prevCount) => prevCount + 1);
-      socket.emit('login', { userList: listCopy, newUser: userText });
+      socket.emit('login', { userList: listCopy, newUser: userText, role });
       return listCopy;
     });
     setCurrUser(userText);
