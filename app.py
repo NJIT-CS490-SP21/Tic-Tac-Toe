@@ -10,7 +10,6 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv, find_dotenv
 
-
 load_dotenv(find_dotenv())
 
 APP = Flask(__name__, static_folder='./build/static')
@@ -23,6 +22,7 @@ APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 DB = SQLAlchemy(APP)
 # pylint: disable=wrong-import-position
 import models
+
 importlib.reload(models)
 DB.create_all()
 # IMPORTANT: This must be AFTER creating db variable to prevent
@@ -35,15 +35,20 @@ SOCKETIO = SocketIO(APP,
                     cors_allowed_origins="*",
                     json=json,
                     manage_session=False)
+
+
 def get_user_data(username):
     """
     This method is to get model Player by username
     @param username
     """
+    # pylint: disable=no-member
     all_players = DB.session.query(models.Player)
     user_data = all_players.filter_by(username=username).first()
     print(type(user_data))
     return user_data
+
+
 def update_score(winner, loser):
     """
     This method is to update score of users in database
@@ -54,12 +59,16 @@ def update_score(winner, loser):
     loser_data = get_user_data(loser)
     winner_data.score += 1
     loser_data.score -= 1
+    # pylint: disable=no-member
     DB.session.commit()
+
+
 def add_user(username):
     """
     This method is to add new user to database
     @param username
     """
+    # pylint: disable=no-member
     all_players = DB.session.query(models.Player)
     #Check if username is already exists:
     if bool(all_players.filter_by(username=username).first()):
@@ -73,11 +82,14 @@ def add_user(username):
     for person in updated_players:
         users.append(person.username)
     return users
+
+
 def get_player_board():
     """
     This method is to query the list of all users in database
     @return: a dictionary of users and scores
     """
+    # pylint: disable=no-member
     all_players = DB.session.query(models.Player).order_by(
         models.Player.score.desc())
     users = []
@@ -96,10 +108,14 @@ def index(filename):
     This method is to route the path to the app's index file
     """
     return send_from_directory('./build', filename)
+
+
 USER_LIST = {}
 PLAYER = "X"
 WINNER = ""
 LOSER = ""
+
+
 @SOCKETIO.on('connect')
 def on_connect():
     """
@@ -139,10 +155,13 @@ def on_login(data):
     global USER_LIST
     PLAYER = "X"
     #USER_LIST = data['userList']
-    USER_LIST = update_user_list(data['newUser'], data['role'], data['userList'])
+    USER_LIST = update_user_list(data['newUser'], data['role'],
+                                 data['userList'])
     add_user(data['newUser'])
     SOCKETIO.emit('player_board', get_player_board())
     SOCKETIO.emit('login', data, broadcast=True, include_self=False)
+
+
 @SOCKETIO.on('start')
 def on_start():
     """
@@ -150,12 +169,15 @@ def on_start():
     """
     SOCKETIO.emit('start', broadcast=True)
 
+
 def update_user_list(username, role, user_list):
     """
     This method is to update role for username
     """
     user_list[username] = role
     return user_list
+
+
 def is_turn(value, curr_player, user_list):
     """
     This method is to validate if it is the current user's turn to play
@@ -163,6 +185,8 @@ def is_turn(value, curr_player, user_list):
     if len(user_list) < 2 or value != curr_player or value == "Spectator":
         return False
     return True
+
+
 @SOCKETIO.on('validate')
 def on_validate(data):
     """
@@ -178,6 +202,8 @@ def on_validate(data):
     else:
         data['isTurn'] = True
         SOCKETIO.emit('validate', data, broadcast=True, include_self=True)
+
+
 @SOCKETIO.on('go')
 def on_go(value):
     """
@@ -190,6 +216,7 @@ def on_go(value):
     else:
         PLAYER = "X"
 
+
 def set_game_result(winner, winner_value):
     """
     This method is to set the username for winner and loser
@@ -199,6 +226,8 @@ def set_game_result(winner, winner_value):
     else:
         loser = get_user_by_value("X")
     return {'winner': winner, 'loser': loser}
+
+
 @SOCKETIO.on('win')
 def on_win(value):
     """
@@ -217,6 +246,7 @@ def on_win(value):
     data['winner'] = WINNER
 
     SOCKETIO.emit('win', data)
+
 
 @SOCKETIO.on('full')
 def on_full():
@@ -241,7 +271,8 @@ def on_reset(data):
 
 
 @SOCKETIO.on('update')
-def on_update(data):  # data is whatever arg you pass in your emit call on client
+def on_update(
+        data):  # data is whatever arg you pass in your emit call on client
     """
     This method is to update the data
     """
@@ -250,12 +281,12 @@ def on_update(data):  # data is whatever arg you pass in your emit call on clien
     # the client that emmitted the event that triggered this function
     SOCKETIO.emit('update', data, broadcast=True, include_self=False)
 
+
 # pylint: disable=invalid-envvar-default
 if __name__ == "__main__":
-# Note that we don't call app.run anymore. We call socketio.run with app arg
+    # Note that we don't call app.run anymore. We call socketio.run with app arg
     SOCKETIO.run(
         APP,
         host=os.getenv('IP', '0.0.0.0'),
         port=8081 if os.getenv('C9_PORT') else int(os.getenv('PORT', 8081)),
     )
-    
