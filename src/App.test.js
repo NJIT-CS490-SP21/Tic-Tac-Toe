@@ -16,7 +16,9 @@ test('Log in button disappears', () => {
 test('Player board appears', () => {
   render(<PlayerBoard />);
   render(<App />);
-  const playerBoardBtnElement = screen.getByText('player board!', { exact: false });
+  const playerBoardBtnElement = screen.getByText('player board!', {
+    exact: false,
+  });
   expect(playerBoardBtnElement).toBeInTheDocument();
 
   fireEvent.click(playerBoardBtnElement);

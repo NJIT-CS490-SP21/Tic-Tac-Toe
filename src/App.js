@@ -96,70 +96,68 @@ function App() {
             </div>
             <Board currUser={currUser} value={userList[currUser]} />
             <div className="item border">
-              {
-                (function dashboard() {
-                  if (foundWinner) {
-                    return (
-                      <div>
-                        <div className="text-big" role="alert">
-                          FOUND WINNER:
-                          {' '}
-                          {winner}
-                          {' '}
-                          -
-                          {' '}
-                          {winnerVal}
-                        </div>
-                        <button
-                          type="button"
-                          className="btn btn-primary btn-sm"
-                          onClick={onClickReset}
-                        >
-                          Click here to reset game!
-                        </button>
-                      </div>
-                    );
-                  }
-                  if (isBoardFull) {
-                    return (
-                      <div>
-                        <div className="text-big" role="alert">
-                          BOARD FULL!
-                        </div>
-                        <button
-                          type="button"
-                          className="btn btn-primary btn-sm"
-                          onClick={onClickReset}
-                        >
-                          Click here to reset game!
-                        </button>
-                      </div>
-                    );
-                  }
-
+              {(function dashboard() {
+                if (foundWinner) {
                   return (
-                    <ul>
-                      <p className="text-bold text-big">
-                        Your role is
+                    <div>
+                      <div className="text-big" role="alert">
+                        FOUND WINNER:
                         {' '}
-                        {userList[currUser]}
-                      </p>
-                      <li className="text-small list-group-item">
-                        Game only starts when there are at least 2 users
-                      </li>
-                      <li className="text-small list-group-item">
-                        If you are X, you are first
-                      </li>
-                      <li className="text-small list-group-item">
-                        You can only play if it&apos;s your turn
-                      </li>
-                      <li className="text-small list-group-item">
-                        If you&apos;re a Spectator, you cant make a move
-                      </li>
-                    </ul>
+                        {winner}
+                        {' '}
+                        -
+                        {' '}
+                        {winnerVal}
+                      </div>
+                      <button
+                        type="button"
+                        className="btn btn-primary btn-sm"
+                        onClick={onClickReset}
+                      >
+                        Click here to reset game!
+                      </button>
+                    </div>
                   );
-                }())
-              }
+                }
+                if (isBoardFull) {
+                  return (
+                    <div>
+                      <div className="text-big" role="alert">
+                        BOARD FULL!
+                      </div>
+                      <button
+                        type="button"
+                        className="btn btn-primary btn-sm"
+                        onClick={onClickReset}
+                      >
+                        Click here to reset game!
+                      </button>
+                    </div>
+                  );
+                }
+
+                return (
+                  <ul>
+                    <p className="text-bold text-big">
+                      Your role is
+                      {' '}
+                      {userList[currUser]}
+                    </p>
+                    <li className="text-small list-group-item">
+                      Game only starts when there are at least 2 users
+                    </li>
+                    <li className="text-small list-group-item">
+                      If you are X, you are first
+                    </li>
+                    <li className="text-small list-group-item">
+                      You can only play if it&apos;s your turn
+                    </li>
+                    <li className="text-small list-group-item">
+                      If you&apos;re a Spectator, you cant make a move
+                    </li>
+                  </ul>
+                );
+              }())}
             </div>
             <PlayerBoard currUser={currUser} />
           </div>
@@ -170,7 +168,11 @@ function App() {
               type="text"
               placeholder="Enter your username"
             />
-            <button type="button" className="btn btn-primary" onClick={logInButton}>
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={logInButton}
+            >
               Log In
             </button>
           </div>
