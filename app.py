@@ -101,7 +101,6 @@ USER_LIST = {}
 PLAYER = "X"
 WINNER = ""
 LOSER = ""
-    
 @SOCKETIO.on('connect')
 def on_connect():
     """
@@ -140,15 +139,11 @@ def on_login(data):
     global PLAYER
     global USER_LIST
     PLAYER = "X"
-    
     #USER_LIST = data['userList']
     USER_LIST = update_user_list(data['newUser'], data['role'], data['userList'])
-
     add_user(data['newUser'])
     SOCKETIO.emit('player_board', get_player_board())
     SOCKETIO.emit('login', data, broadcast=True, include_self=False)
-    
-
 @SOCKETIO.on('start')
 def on_start():
     """
@@ -157,15 +152,18 @@ def on_start():
     SOCKETIO.emit('start', broadcast=True)
 
 def update_user_list(username, role, user_list):
+    """
+    This method is to update role for username
+    """
     user_list[username] = role
     return user_list
-    
 def is_turn(value, curr_player, user_list):
+    """
+    This method is to validate if it is the current user's turn to play
+    """
     if len(user_list) < 2 or value != curr_player or value == "Spectator":
         return False
-    else:
-        return True
-        
+    return True
 @SOCKETIO.on('validate')
 def on_validate(data):
     """
@@ -173,18 +171,14 @@ def on_validate(data):
     """
     # pylint: disable=global-statement
     value = data['value']
-    
     global PLAYER
     global USER_LIST
-
     if len(USER_LIST) < 2 or value != PLAYER or value == "Spectator":
         data['isTurn'] = False
         SOCKETIO.emit('validate', data, broadcast=True, include_self=True)
     else:
         data['isTurn'] = True
         SOCKETIO.emit('validate', data, broadcast=True, include_self=True)
-
-
 @SOCKETIO.on('go')
 def on_go(value):
     """
@@ -198,12 +192,14 @@ def on_go(value):
         PLAYER = "X"
 
 def set_game_result(winner, winner_value):
+    """
+    This method is to set the username for winner and loser
+    """
     if winner_value == "X":
         loser = get_user_by_value("O")
     else:
         loser = get_user_by_value("X")
     return {'winner': winner, 'loser': loser}
-    
 @SOCKETIO.on('win')
 def on_win(value):
     """
@@ -215,18 +211,10 @@ def on_win(value):
 
     data = {}
     data['value'] = value
-    
     WINNER = get_user_by_value(value)
-    """
-    if value == "X":
-        LOSER = get_user_by_value("O")
-    else:
-        LOSER = get_user_by_value("X")
-    """
     result = set_game_result(WINNER, value)
     #WINNER = result['winner']
     LOSER = result['loser']
-    
     data['winner'] = WINNER
 
     SOCKETIO.emit('win', data)
