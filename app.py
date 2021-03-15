@@ -142,7 +142,7 @@ def on_validate(data):
 @socketio.on('go')
 def on_go(value):
     global player
-    if (value == "X"):
+    if value == "X":
         player = "O"
     else:
         player = "X"
