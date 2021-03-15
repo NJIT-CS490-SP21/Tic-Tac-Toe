@@ -72,11 +72,11 @@ class GetUserDataTestCase(unittest.TestCase):
         self.success_test_params = [
             {
                 KEY_INPUT: "hang1",
-                KEY_EXPECTED: models.Player(username="hang1", score=106),
+                KEY_EXPECTED: models.Player(username="hang1", score=109),
             },
             {
                 KEY_INPUT: 'hang2',
-                KEY_EXPECTED: models.Player(username="hang2", score=94),
+                KEY_EXPECTED: models.Player(username="hang2", score=91),
             },
             {
                 KEY_INPUT: 'hang3',
