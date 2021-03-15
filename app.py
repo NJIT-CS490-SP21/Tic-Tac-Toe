@@ -51,7 +51,23 @@ def update_score(winner, loser):
     loser_data.score -= 1
     DB.session.commit()
 
-
+def add_user(username):
+    all_players = DB.session.query(models.Player)
+    
+    #Check if username is already exists:
+    if bool(all_players.filter_by(username=username).first()):
+        print("Username exists")
+    else:
+        new_user = models.Player(username=username, score=100)
+        DB.session.add(new_user)
+        DB.session.commit()
+    
+    updated_players = DB.session.query(models.Player)
+    users = []
+    for person in updated_players:
+        users.append(person.username)
+    return users
+    
 def get_player_board():
     """
     This method is to query the list of all users in database
@@ -120,17 +136,9 @@ def on_login(data):
     global USER_LIST
     PLAYER = "X"
     USER_LIST = data['userList']
-
-    all_players = DB.session.query(models.Player)
-
-    #Check if username is already exists:
-    if bool(all_players.filter_by(username=data['newUser']).first()):
-        print("Username exists")
-    else:
-        new_user = models.Player(username=data['newUser'], score=100)
-        DB.session.add(new_user)
-        DB.session.commit()
-
+    
+    add_user(data['newUser'])
+    
     SOCKETIO.emit('player_board', get_player_board())
 
     SOCKETIO.emit('login', data, broadcast=True, include_self=False)
