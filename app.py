@@ -3,11 +3,9 @@ This module contains all socket event handlers and database transaction handler
 """
 import os
 import json
-import importlib
 from flask import Flask, send_from_directory, json
 from flask_socketio import SocketIO
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
@@ -19,11 +17,12 @@ APP.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 # Gets rid of a warning
 APP.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-DB = SQLAlchemy(APP)
-DB.create_all()
+#DB = SQLAlchemy(APP)
+#DB.create_all()
 # pylint: disable=wrong-import-position
-import models
-importlib.reload(models)
+from models import Player, DB
+DB.init_app(APP)
+#importlib.reload(models)
 # IMPORTANT: This must be AFTER creating db variable to prevent
 # circular import issues
 #from models import Person
@@ -42,7 +41,7 @@ def get_user_data(username):
     @param username
     """
     # pylint: disable=no-member
-    all_players = DB.session.query(models.Player)
+    all_players = DB.session.query(Player)
     user_data = all_players.filter_by(username=username).first()
     print(type(user_data))
     return user_data
@@ -68,15 +67,15 @@ def add_user(username):
     @param username
     """
     # pylint: disable=no-member
-    all_players = DB.session.query(models.Player)
+    all_players = DB.session.query(Player)
     #Check if username is already exists:
     if bool(all_players.filter_by(username=username).first()):
         print("Username exists")
     else:
-        new_user = models.Player(username=username, score=100)
+        new_user = Player(username=username, score=100)
         DB.session.add(new_user)
         DB.session.commit()
-    updated_players = models.Player.query.all()
+    updated_players = Player.query.all()
     users = []
     for person in updated_players:
         users.append(person.username)
@@ -89,8 +88,8 @@ def get_player_board():
     @return: a dictionary of users and scores
     """
     # pylint: disable=no-member
-    all_players = DB.session.query(models.Player).order_by(
-        models.Player.score.desc())
+    all_players = DB.session.query(Player).order_by(
+        Player.score.desc())
     users = []
     scores = []
 
