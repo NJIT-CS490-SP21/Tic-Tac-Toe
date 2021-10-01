@@ -46,7 +46,6 @@ export default function Board(prop) {
 
   useEffect(() => {
     socket.on('validate', (data) => {
-      // console.log(data);
       const { isTurn } = data;
       const { id } = data;
       const { value } = data;
@@ -66,14 +65,10 @@ export default function Board(prop) {
         });
 
         if (isEmpty) {
-          // console.log(newBoard);
           setBoard(newBoard);
-
           const winner = calculateWinner(newBoard);
 
-          // let status;
           if (winner) {
-            // status = "Winner: " + winner;
             socket.emit('win', winner);
           }
 
@@ -111,9 +106,7 @@ export default function Board(prop) {
 
         const winner = calculateWinner(newBoard);
 
-        // let status;
         if (winner) {
-          // status = "Winner: " + winner;
           socket.emit('win', winner);
         }
 
